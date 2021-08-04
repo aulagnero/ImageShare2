@@ -1,9 +1,20 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Image, Text, TouchableOpacity, View } from 'react-native';
-import logo from './assets/logo.png';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function App() {
+  let openImagePickerAsync = async () => {
+    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access Media Library is required!");
+      return;
+    }
+
+    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    console.log(pickerResult);
+  }
+
   return (
     <View style={styles.container}>
     <Image source={{ uri: "https://i.imgur.com/TkIrScD.png" }} style={styles.logo} />
@@ -13,9 +24,8 @@ export default function App() {
       </Text>
 
       <TouchableOpacity
-      onPress={() => alert('Hello, world!')}
-      style={styles.button}>
-      <Text style={{ fontSize:20, color: '#fff' }}>Pick a photo</Text>
+      onPress={openImagePickerAsync} style={styles.button}>
+      <Text style={styles.buttonText}>Pick a photo</Text>
       </TouchableOpacity>
     </View>
   );
